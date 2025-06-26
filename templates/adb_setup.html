@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ADB Device Setup</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    .adb-box {
+      margin-top: 15vh;
+      text-align: center;
+      background: #001f1f;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px #00ffcc;
+      color: #00ffcc;
+      width: 70%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .device-info {
+      margin: 20px 0;
+      font-size: 1.2rem;
+      white-space: pre-wrap;
+    }
+
+    .confirm-check {
+      margin: 20px;
+    }
+
+    .proceed-btn {
+      padding: 12px 30px;
+      font-size: 1rem;
+      background: transparent;
+      color: #00ffcc;
+      border: 2px solid #00ffcc;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .proceed-btn:hover {
+      background: #00ffcc;
+      color: black;
+    }
+  </style>
+</head>
+<body>
+  <div class="adb-box">
+    <h2>🔌 ADB Device Detection</h2>
+    <p class="device-info">{{ device_info }}</p>
+
+    <form method="POST" action="/start-scan-process">
+      <div class="confirm-check">
+        <input type="checkbox" id="confirm" name="confirm" required>
+        <label for="confirm">I allow pulling files and scanning this device</label>
+      </div>
+      <button class="proceed-btn" type="submit">Start Full Scan</button>
+    </form>
+  </div>
+</body>
+</html>

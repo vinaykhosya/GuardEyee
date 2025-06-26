@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>ADB Device Confirmation</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body {
+      text-align: center;
+      padding: 50px;
+      background-color: #001f1f;
+      color: #00ffcc;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .device-box {
+      border: 2px solid #00ffcc;
+      padding: 30px;
+      margin: 20px auto;
+      width: 60%;
+      border-radius: 12px;
+      background-color: #002828;
+      box-shadow: 0 0 15px #00ffcc88;
+    }
+
+    .start-btn {
+      padding: 15px 40px;
+      font-size: 1.2rem;
+      margin: 10px;
+      background-color: transparent;
+      border: 2px solid #00ffcc;
+      color: #00ffcc;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .start-btn:hover {
+      background-color: #00ffcc;
+      color: black;
+      box-shadow: 0 0 15px #00ffccaa;
+    }
+
+    .status {
+      font-size: 1.1rem;
+      margin-top: 20px;
+    }
+
+    form {
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔌 ADB Device Status</h1>
+  <div class="device-box">
+    {% if device_connected %}
+      ✅ <strong>Device Connected:</strong><br/><br/>
+      <pre>{{ device_info }}</pre>
+
+      <!-- Button 1: Pull Files -->
+      <form method="POST" action="/pull-files">
+        <button class="start-btn" type="submit">📥 Pull Files</button>
+      </form>
+
+      <!-- Button 2: Start Scan -->
+      <form method="POST" action="/start-scan">
+        <button class="start-btn" type="submit">🛡️ Scan Files</button>
+      </form>
+
+    {% else %}
+      ❌ <strong>No Device Found</strong><br/>
+      <div class="status">
+        Please connect a device with USB debugging enabled and run:<br/>
+        <code>adb devices</code>
+      </div>
+    {% endif %}
+  </div>
+</body>
+</html>

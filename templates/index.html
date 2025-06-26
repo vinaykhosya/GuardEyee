@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Virus Scanner</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    .container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 3em;
+      margin-bottom: 40px;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc;
+      transition: transform 0.3s;
+    }
+
+    h1:hover {
+      transform: scale(1.05);
+    }
+
+    .options {
+      display: flex;
+      gap: 40px;
+    }
+
+    .btn {
+      padding: 20px 40px;
+      border: 2px solid #00ffcc;
+      border-radius: 10px;
+      background: transparent;
+      color: #00ffcc;
+      font-size: 1.2em;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      box-shadow: 0 0 10px #00ffcc, inset 0 0 10px #00ffcc;
+    }
+
+    .btn:hover {
+      background-color: #00ffcc;
+      color: #000;
+      transform: scale(1.1);
+      box-shadow: 0 0 20px #00ffcc, inset 0 0 20px #00ffcc;
+    }
+
+    .cursor-glow {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      pointer-events: none;
+      border-radius: 50%;
+      background: radial-gradient(circle, #00ffcc55, transparent 70%);
+      mix-blend-mode: screen;
+      transition: transform 0.1s;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Welcome to Our Virus Scanner</h1>
+    <div class="options">
+      <button class="btn" onclick="window.location.href='/check-adb-device'">Full Scan</button>
+
+      <button class="btn" onclick="window.location.href='/upload'">Partial Scan</button>
+    </div>
+  </div>
+
+  <div class="cursor-glow" id="cursorGlow"></div>
+
+  <script>
+    function startFullScan() {
+      fetch('/start-full-scan', { method: 'POST' })
+        .then(res => res.json())
+        .then(data => {
+          window.location.href = `/full-scan-result?summary=${encodeURIComponent(data.summary)}`;
+        })
+        .catch(err => alert("Error: " + err));
+    }
+
+    document.addEventListener('mousemove', e => {
+      const cursor = document.getElementById('cursorGlow');
+      cursor.style.transform = `translate(${e.pageX - 50}px, ${e.pageY - 50}px)`;
+    });
+  </script>
+</body>
+</html>

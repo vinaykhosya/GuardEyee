@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Scanning in Progress</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body {
+      background: #001f1f;
+      color: #00ffcc;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding-top: 8vh;
+    }
+
+    h1 {
+      font-size: 2rem;
+    }
+
+    .loader {
+      border: 6px solid #004040;
+      border-top: 6px solid #00ffcc;
+      border-radius: 50%;
+      width: 80px;
+      height: 80px;
+      animation: spin 1s linear infinite;
+      margin: 30px auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .status {
+      font-size: 1.2rem;
+      margin-top: 20px;
+      color: #00ffee;
+    }
+
+    .log-box {
+      width: 80%;
+      max-height: 220px;
+      overflow-y: auto;
+      background-color: #002828;
+      color: #00ffcc;
+      border: 2px solid #00ffcc;
+      padding: 15px;
+      margin: 40px auto 20px;
+      border-radius: 10px;
+      text-align: left;
+      font-size: 0.95rem;
+      box-shadow: 0 0 10px #00ffcc44;
+    }
+
+    pre {
+      margin: 0;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🔍 Scanning Your Device</h1>
+  <div class="loader"></div>
+  <p class="status">Pulling files and analyzing...<br>Please do not close or refresh.</p>
+
+  <div class="log-box">
+    <pre id="logOutput">[Waiting for scan to start...]</pre>
+  </div>
+
+  <script>
+    // ✅ Start background scan (only once)
+    fetch("/run-background-scan", { method: "POST" });
+
+    // ✅ Poll scan completion
+    setInterval(() => {
+      fetch("/get-scan-result")
+        .then(res => res.json())
+        .then(data => {
+          if (data.ready) {
+            window.location.href = "/full-scan-result?summary=" + encodeURIComponent(data.summary);
+          }
+        });
+    }, 4000);
+
+    // ✅ Poll latest logs
+    setInterval(() => {
+      fetch("/get-scan-log")
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById("logOutput").textContent = data.lines.join("");
+        });
+    }, 2000);
+  </script>
+
+</body>
+</html>

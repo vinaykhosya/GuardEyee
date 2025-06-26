@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Upload & Scan</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body {
+      overflow-x: hidden;
+    }
+
+    .upload-container {
+      text-align: center;
+      margin-top: 8vh;
+    }
+
+    form {
+      margin-bottom: 60px;
+    }
+
+    .scanner-scene {
+      position: relative;
+      width: 100%;
+      height: 300px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .file-icon {
+      width: 80px;
+      height: 80px;
+      background-image: url("https://cdn-icons-png.flaticon.com/512/716/716784.png"); /* ✅ yellow folder */
+      background-size: cover;
+      background-position: center;
+      position: absolute;
+      top: 100px;
+      left: -100px;
+      opacity: 0;
+      transition: left 2s ease, opacity 0.5s ease;
+      z-index: 10;
+    }
+
+    .scanner-box {
+      width: 200px;
+      height: 120px;
+      background: linear-gradient(145deg, #001111, #002222);
+      border-radius: 20px;
+      box-shadow: 0 0 25px #00ffcc;
+      position: absolute;
+      right: 80px;
+      top: 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 5;
+      color: #00ffcc;
+      font-size: 1.1rem;
+      font-family: 'Orbitron', sans-serif;
+      letter-spacing: 2px;
+    }
+
+    .scan-strip {
+      width: 85%;
+      height: 10px;
+      background-color: #00ffcc55;
+      border-radius: 5px;
+      animation: glow-strip 1.5s infinite ease-in-out;
+      display: none;
+      margin-top: 8px;
+    }
+
+    @keyframes glow-strip {
+      0%, 100% { background-color: #00ffcc22; }
+      50% { background-color: #00ffcc; }
+    }
+  </style>
+</head>
+<body>
+  <div class="upload-container">
+    <h2>Select a file to scan</h2>
+    <form action="/scan-file" method="POST" enctype="multipart/form-data" onsubmit="startScanAnimation(event)">
+      <input type="file" id="fileInput" name="file" style="display:none;" onchange="revealIcon()"/>
+      <label for="fileInput" class="upload-label">Choose File</label><br/>
+      <button class="submit-btn" type="submit">Scan Now</button>
+    </form>
+
+    <div class="scanner-scene">
+      <div id="fileIcon" class="file-icon"></div>
+      <div class="scanner-box">
+        SCANNER
+        <div class="scan-strip" id="scannerLight"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function revealIcon() {
+      document.getElementById("fileIcon").style.opacity = 1;
+    }
+
+    function startScanAnimation(event) {
+      event.preventDefault();
+
+      const icon = document.getElementById("fileIcon");
+      const light = document.getElementById("scannerLight");
+
+      icon.style.left = "calc(100% - 280px)";
+
+      // glow starts once icon arrives
+      setTimeout(() => {
+        light.style.display = "block";
+        icon.style.opacity = 0; // ✅ hide the folder after entering
+      }, 1800);
+
+      // after scan ends
+      setTimeout(() => {
+        light.style.display = "none";
+        event.target.submit();
+      }, 3800);
+    }
+  </script>
+</body>
+</html>

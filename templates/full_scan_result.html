@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Full Scan Result</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<style>
+  .result-box {
+    margin-top: 10vh;
+    text-align: left;
+    padding: 30px;
+    background: #001f1f;
+    border-radius: 20px;
+    box-shadow: 0 0 20px #00ffcc;
+    color: #00ffcc;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 1.1rem;
+    max-height: 80vh;         /* 🔁 Limit visible height */
+    overflow-y: auto;         /* 🔁 Add vertical scroll if needed */
+  }
+
+  .dropdown {
+    margin-top: 20px;
+    background-color: #003333;
+    padding: 10px;
+    border-radius: 10px;
+  }
+
+  summary {
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    color: #00ffff;
+  }
+
+  .file-entry {
+    margin: 10px 0;
+    padding-left: 20px;
+  }
+
+  .path {
+    font-size: 0.9rem;
+    color: #66ffcc;
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-top: 30px;
+    font-size: 1rem;
+    color: #00ffcc;
+    text-decoration: underline;
+  }
+
+  .back-link:hover {
+    color: white;
+  }
+</style>
+
+</head>
+<body>
+  <div class="result-box">
+    <h2>🔍 Full Scan Report</h2>
+    <p>{{ summary }}</p>
+
+    {% for category, items in report.items() %}
+    <details class="dropdown">
+      <summary>📂 {{ category }} ({{ items|length }})</summary>
+      <div>
+        {% for entry in items %}
+          <div class="file-entry">
+            <b>{{ entry.filename }}</b> - <span>{{ entry.risk_level }}</span><br>
+            <div class="path">📍 {{ entry.path }}</div>
+            {% if entry.summary %}<pre>{{ entry.summary }}</pre>{% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    </details>
+    {% endfor %}
+
+    <a class="back-link" href="/">⬅️ Back to Home</a>
+  </div>
+</body>
+</html>
