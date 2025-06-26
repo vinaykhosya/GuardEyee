@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # 🛡️ GuardEye: Advanced AI-Driven Malware Detection Suite
 
 > A complete malware analysis and threat detection platform using Artificial Intelligence, reverse engineering, OCR, and embedded file scanning — with optional ESP32 hardware integration.
